@@ -37,23 +37,19 @@ class _EDashBoardState extends State<EDashBoard> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  
                   controller: data,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20),
                   maxLines: null,
                   decoration: InputDecoration(
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: "Response...",
-                    hintStyle: TextStyle(
-                      color: Colours.mine,
-                      
-                      fontSize: 20,
-
-                    )
-                  ),
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Response...",
+                      hintStyle: TextStyle(
+                        color: Colours.mine,
+                        fontSize: 20,
+                      )),
                 ),
               ),
             ),
@@ -67,13 +63,27 @@ class _EDashBoardState extends State<EDashBoard> {
                   borderRadius: BorderRadius.circular(22), color: Colours.mine),
               child: MaterialButton(
                 onPressed: () {
-                  setState(() {
-                    String question = Data.toEmployee.dequeue();
+                  if (data.text != "" &&
+                      !Data.toEmployee.isEmpty() &&
+                      data.text != " ") {
+                      print("Here "+data.text);
+                    setState(() {
+                      String question = Data.toEmployee.dequeue();
 
-                    List<String> complete = [question, data.text];
-                    Data.toManager.enqueue(complete);
-                    data.clear();
-                  });
+                      List<String> complete = [question, data.text];
+                      Data.toManager.enqueue(complete);
+                      data.clear();
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        "There are no Tasks to submit or Invalid Input",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.black,
+                      duration: Duration(seconds: 3),
+                    ));
+                  }
                 },
                 child: const Row(
                   children: [
@@ -102,30 +112,33 @@ class _EDashBoardState extends State<EDashBoard> {
             ),
             Divider(),
             Center(
-              child: Text("Tasks From Manager",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colours.mine,
-                fontSize: 25
-              ),),
+              child: Text(
+                "Tasks From Manager",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colours.mine,
+                    fontSize: 25),
+              ),
             ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: SizedBox(
                   child: SingleChildScrollView(
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: Data.toEmployee.getLength()-1,
-                        padding: EdgeInsets.only(top:10, bottom: 10),
+                        itemCount: Data.toEmployee.getLength() - 1,
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.only(top:8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             child: emCard(
-                              data: (Data.toEmployee.isEmpty())?(null):(Data.toEmployee.getData()![index]),
+                              data: (Data.toEmployee.isEmpty())
+                                  ? (null)
+                                  : (Data.toEmployee.getData()![index]),
                             ),
                           );
                         }),

@@ -4,8 +4,7 @@ import 'package:tasker/config/colours.dart';
 class Mcard extends StatelessWidget {
   final dynamic? question;
   final dynamic? answer;
-  final String? empName;
-  Mcard({super.key, required this.question, required this.answer, required this.empName});
+  Mcard({super.key, required this.question, required this.answer, });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class Mcard extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
-                empName!,
+                "Assistant",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             )

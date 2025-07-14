@@ -14,7 +14,7 @@ class MDashboard extends StatefulWidget {
 }
 
 class _MDashboardState extends State<MDashboard> {
-  Users? targetEmp = Data.employees[0];
+
   TextEditingController data = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -33,64 +33,13 @@ class _MDashboardState extends State<MDashboard> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: 30,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colours.mine,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Center(
-                  child: DropdownMenu(
-                    width: (MediaQuery.of(context).size.width) * 0.85,
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: InputBorder.none,
-                    ),
-                    menuStyle: MenuStyle(
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith((states) {
-                        return Colours.mine;
-                      }),
-                    ),
-                    trailingIcon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                    textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white),
-                    onSelected: (value) {
-                      targetEmp = value;
-                    },
-                    dropdownMenuEntries: <DropdownMenuEntry<Users>>[
-                      DropdownMenuEntry(
-                          value: Data.employees[0],
-                          label: Data.employees[0].getName(),
-                          labelWidget: Text(
-                            Data.employees[0].getName(),
-                            style: TextStyle(color: Colors.white),
-                          )),
-                      DropdownMenuEntry(
-                          value: Data.employees[1],
-                          label: Data.employees[1].getName(),
-                          labelWidget: Text(
-                            Data.employees[1].getName(),
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
-                    initialSelection: Data.employees[0],
-                  ),
-                ),
-              ),
-            ),
+            
             SizedBox(
               height: 10,
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: (MediaQuery.of(context).size.height) * 0.15,
+              height: (MediaQuery.of(context).size.height) * 0.20,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(width: 5, color: Colours.mine!),
@@ -103,6 +52,13 @@ class _MDashboardState extends State<MDashboard> {
                   style: TextStyle(fontSize: 20),
                   maxLines: null,
                   decoration: InputDecoration(
+                     hintText: "Enter Task...",
+                    hintStyle: TextStyle(
+                      color: Colours.mine,
+                      
+                      fontSize: 20,
+
+                    ),
                     border: InputBorder.none,
                     filled: true,
                     fillColor: Colors.white,
@@ -120,14 +76,20 @@ class _MDashboardState extends State<MDashboard> {
                   borderRadius: BorderRadius.circular(22), color: Colours.mine),
               child: MaterialButton(
                 onPressed: () {
+                  if(data.text != "" && data.text != " "){
                   setState(() {
-                    if (targetEmp == Data.employees[0]) {
                       Data.toEmployee.enqueue(data.text);
                       data.clear();
-                    } else {
-                      print("tough");
-                    }
+                   
                   });
+                  }else{
+                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              "Please Enter The task", style: TextStyle(color: Colors.white),),
+                          backgroundColor: Colors.black,
+                          duration: Duration(seconds: 3),
+                        ));
+                  }
                 },
                 child: Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,6 +118,14 @@ class _MDashboardState extends State<MDashboard> {
               height: 10,
             ),
             Divider(),
+            Center(
+              child: Text("Completed Tasks",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colours.mine,
+                fontSize: 25
+              ),),
+            ),
             (!Data.toManager.isEmpty())
                 ? Container(
                     height: 50,
@@ -208,8 +178,8 @@ class _MDashboardState extends State<MDashboard> {
                         padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                         child: Mcard(
                             question: Data.toManager.getData()![index][0],
-                            answer: Data.toManager.getData()![index][1],
-                            empName: "Emp001"),
+                            answer: Data.toManager.getData()![index][1]
+                           ),
                       );
                     }),
               ),
